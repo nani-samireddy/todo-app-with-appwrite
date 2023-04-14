@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo/apis/auth_api.dart';
 import 'package:todo/apis/user_api.dart';
 import 'package:todo/core/utils.dart';
+import 'package:todo/features/authentication/view/signup_view.dart';
 import 'package:todo/features/home/view/home_view.dart';
 import 'package:appwrite/models.dart' as account_model;
 import 'package:todo/models/user_model.dart';
@@ -14,6 +15,17 @@ final authControllerProvider =
     authAPI: ref.watch(authApiProvider),
     userAPI: ref.watch(userApiProvider),
   );
+});
+
+final currentuserDetailsProvider = FutureProvider((ref) {
+  final currentUserId = ref.watch(currentUserProvider).value!.$id;
+  final userDetails = ref.watch(userDetailsProvider(currentUserId));
+  return userDetails.value;
+});
+
+final userDetailsProvider = FutureProvider.family((ref, String uid) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid: uid);
 });
 
 final currentUserProvider = FutureProvider((ref) {
@@ -44,7 +56,7 @@ class AuthController extends StateNotifier<bool> {
 
     res.fold((l) {
       state = false;
-      showSnackBar(context, l.message);
+      showSnackBar(context: context, content: l.message);
     }, (r) async {
       final res2 = await _userAPI.saveUserData(
         user: UserModel(name: name, email: email, uid: r.$id),
@@ -53,7 +65,7 @@ class AuthController extends StateNotifier<bool> {
       state = false;
 
       res2.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackBar(context: context, content: l.message),
         (r) => login(email: email, password: password, context: context),
       );
     });
@@ -68,7 +80,7 @@ class AuthController extends StateNotifier<bool> {
     final res = await _authAPI.login(emailAddress: email, password: password);
     state = false;
     res.fold((l) {
-      showSnackBar(context, l.message);
+      showSnackBar(context: context, content: l.message);
     }, (r) {
       log("Logged in successfully");
       Navigator.pushAndRemoveUntil(context, HomeView.route(), (route) => false);
@@ -76,4 +88,18 @@ class AuthController extends StateNotifier<bool> {
   }
 
   Future<account_model.Account?> currentUser() => _authAPI.currentAccount();
+
+  void logout({required BuildContext context}) async {
+    final res = await _authAPI.logout();
+    res.fold(
+        (l) => null,
+        (r) => Navigator.pushAndRemoveUntil(
+            context, SignUpView.route(), (route) => false));
+  }
+
+  Future<UserModel> getUserData({required String uid}) async {
+    final document = await _userAPI.getUserData(uid: uid);
+    final updatedUser = UserModel.fromMap(document.data);
+    return updatedUser;
+  }
 }

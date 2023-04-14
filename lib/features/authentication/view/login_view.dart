@@ -6,7 +6,7 @@ import 'package:todo/common/rounded_primary_button.dart';
 import 'package:todo/constants/ui_constants.dart';
 import 'package:todo/features/authentication/controller/auth_controller.dart';
 import 'package:todo/features/authentication/view/signup_view.dart';
-import 'package:todo/features/authentication/widgets/auth_field.dart';
+import 'package:todo/common/custom_text_input_field.dart';
 import 'package:todo/theme/theme.dart';
 
 class LoginView extends ConsumerStatefulWidget {
@@ -51,14 +51,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                   child: Column(
                     children: [
-                      AuthField(
+                      CustomTextInputField(
                         controller: emailController,
                         hintText: "Email",
                       ),
                       const SizedBox(
                         height: 40,
                       ),
-                      AuthField(
+                      CustomTextInputField(
                         controller: passwordController,
                         hintText: "Password",
                       ),

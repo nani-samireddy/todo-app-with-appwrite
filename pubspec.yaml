@@ -38,6 +38,8 @@ dependencies:
   appwrite: ^8.2.0
   fpdart: ^0.5.0
   flutter_riverpod: ^2.3.4
+  stack_trace: ^1.11.0
+  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:

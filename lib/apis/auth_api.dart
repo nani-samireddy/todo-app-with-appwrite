@@ -8,9 +8,6 @@ final authApiProvider = Provider((ref) {
   return AuthAPI(account: ref.watch(appWriteAccountProvider));
 });
 
-
-
-
 abstract class IAuthAPI {
   FutureEither<account_model.Account> signUp(
       {required String emailAddress,
@@ -21,6 +18,7 @@ abstract class IAuthAPI {
       {required String emailAddress, required String password});
 
   Future<account_model.Account?> currentAccount();
+  FutureVoid logout();
 }
 
 class AuthAPI implements IAuthAPI {
@@ -74,6 +72,22 @@ class AuthAPI implements IAuthAPI {
       return await _account.get();
     } catch (e) {
       return null;
+    }
+  }
+
+  @override
+  FutureEitherVoid logout() async {
+    try {
+       await _account.deleteSession(sessionId: 'current');
+      return right(null);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(Failure(
+          message: e.message ?? "unexpected error occured",
+          stackTrace: stackTrace));
+    } catch (e, stackTrace) {
+      return left(
+        Failure(message: e.toString(), stackTrace: stackTrace),
+      );
     }
   }
 }

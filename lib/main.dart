@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo/common/common.dart';
-import 'package:todo/common/loading_page.dart';
 import 'package:todo/features/authentication/controller/auth_controller.dart';
 import 'package:todo/features/authentication/view/signup_view.dart';
 import 'package:todo/features/home/view/home_view.dart';

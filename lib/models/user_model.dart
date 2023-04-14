@@ -35,10 +35,8 @@ class UserModel {
     return UserModel(
       name: map['name'] as String,
       email: map['email'] as String,
-      uid: map['uid'] as String,
+      uid: map['\$id'] as String,
     );
   }
 
-  @override
-  int get hashCode => name.hashCode ^ email.hashCode ^ uid.hashCode;
 }
