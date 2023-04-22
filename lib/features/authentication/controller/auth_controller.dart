@@ -80,6 +80,8 @@ class AuthController extends StateNotifier<bool> {
     final res = await _authAPI.login(emailAddress: email, password: password);
     state = false;
     res.fold((l) {
+      log(l.message);
+      log(l.stackTrace.toString());
       showSnackBar(context: context, content: l.message);
     }, (r) {
       log("Logged in successfully");

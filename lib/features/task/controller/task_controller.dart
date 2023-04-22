@@ -14,7 +14,7 @@ final allTasksProvider = FutureProvider((ref) async {
   final taskController = ref.watch(taskControllerProvider.notifier);
 
   return taskController.getAllTasks(
-      uid: ref.read(currentuserDetailsProvider).value!.uid);
+      uid: ref.watch(currentuserDetailsProvider).value!.uid);
 });
 
 class TaskController extends StateNotifier<bool> {

@@ -65,11 +65,9 @@ class TasksAPI implements ITasksAPI {
   @override
   Future<List<Document>> getAllTasks({required String uid}) async {
     final docs = await _db.listDocuments(
-        databaseId: AppWrtieConstants.databaseId,
-        collectionId: AppWrtieConstants.tasksCollectionId,
-        queries: [
-          "uid=$uid",
-        ]);
+      databaseId: AppWrtieConstants.databaseId,
+      collectionId: AppWrtieConstants.tasksCollectionId,
+    );
     return docs.documents;
   }
 }

@@ -10,6 +10,17 @@ void showSnackBar({required BuildContext context, required String content}) {
   );
 }
 
+void showTaskActionBottomSheet(
+    {required Widget taskActionWidget, required BuildContext context}) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    builder: (context) {
+      return taskActionWidget;
+    },
+  );
+}
+
 Map<dynamic, dynamic> compareMaps(
     {required Map<dynamic, dynamic> map1,
     required Map<dynamic, dynamic> map2}) {

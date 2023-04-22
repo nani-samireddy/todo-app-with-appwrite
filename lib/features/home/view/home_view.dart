@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo/core/utils.dart';
 import 'package:todo/features/authentication/controller/auth_controller.dart';
-import 'package:todo/features/task/view/task_details.dart';
+import 'package:todo/features/task/widgets/list_tasks.dart';
+import 'package:todo/features/task/widgets/task_details.dart';
 import 'package:todo/theme/theme.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -18,22 +20,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
     ref.watch(authControllerProvider.notifier).logout(context: context);
   }
 
-  void showTaskActionBottomSheet({required Widget taskActionWidget}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return taskActionWidget;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final userDetails = ref.watch(currentuserDetailsProvider).value;
     return DefaultTabController(
       length: 3,
-      initialIndex: 1,
+      initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 100,
@@ -62,16 +54,17 @@ class _HomeViewState extends ConsumerState<HomeView> {
           backgroundColor: Pallete.blackColor,
           onPressed: () {
             showTaskActionBottomSheet(
+                context: context,
                 taskActionWidget: const TaskDetails(
-              newTask: true,
-            ));
+                  newTask: true,
+                ));
           },
           icon: const Icon(Icons.add),
           label: const Text("New Task"),
         ),
         body: const TabBarView(
           children: [
-            Center(child: Text("All")),
+            TasksList(allTasks: true),
             Center(child: Text("Pending")),
             Center(child: Text("Completed")),
           ],
